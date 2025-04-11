@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./CoinFlip.css" />
+  </head>
+  <body>
+    <div class="heading-container">
+      <h2>Coin Flip Game</h2>
+    </div>
+    <div class="coins-container">
+      <button class="head" onclick="flipCoins('heads')">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/17480/17480217.png"
+          alt=""
+        />
+      </button>
+      <button class="tails" onclick="flipCoins('tails')">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/17480/17480217.png"
+          alt=""
+        />
+      </button>
+      <button class="reset-score" onclick="resetScoreBoard()">
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/5038/5038573.png"
+          alt=""
+        />
+      </button>
+    </div>
+    <h3 class="score-board">SCORE BOARD</h3>
+    <div class="show-coins-faces">
+      <div class="coin-face-left">
+        <p>Your Toss : <span class="js-your-toss"></span></p>
+        <p>Computer Toss : <span class="js-computer-toss"></span></p>
+      </div>
+      <div class="score-displayer">
+        <p>WINS : <span class="js-wins-count"></span></p>
+        <p>LOOSES : <span class="js-looses-count"></span></p>
+      </div>
+    </div>
+  </body>
+  <script>
+    const coinScoreBoard = JSON.parse(localStorage.getItem("score")) || {
+      wins: 0,
+      looses: 0,
+    };
+    function generateRandomFaces() {
+      const randomNumber = Math.random();
+      let coinFlip = "";
+      const coinFaces =
+        randomNumber > 0.5 ? (coinFlip = "heads") : (coinFlip = "tails");
+      return coinFaces;
+    }
+
+    function flipCoins(coinFace) {
+      const coinFlipFace = generateRandomFaces();
+
+      let result = coinFace === coinFlipFace ? "You Win." : "You loose";
+
+      let scoreBoardValue =
+        result === "You Win."
+          ? (coinScoreBoard.wins += 1)
+          : (coinScoreBoard.looses += 1);
+      console.log(scoreBoardValue);
+
+      localStorage.getItem("score", JSON.stringify(coinScoreBoard));
+
+      const yourToss = document.querySelector(".js-your-toss");
+      const computerToss = document.querySelector(".js-computer-toss");
+      const winsCount = document.querySelector(".js-wins-count");
+      const lossesCount = document.querySelector(".js-looses-count");
+      yourToss.innerHTML = `${coinFace}`;
+      computerToss.innerHTML = `${coinFlipFace}`;
+
+      winsCount.innerHTML = `${coinScoreBoard.wins}`;
+      lossesCount.innerHTML = `${coinScoreBoard.looses}`;
+    }
+    function resetScoreBoard() {
+      coinScoreBoard.wins = 0;
+      coinScoreBoard.looses = 0;
+    }
+  </script>
+</html>
